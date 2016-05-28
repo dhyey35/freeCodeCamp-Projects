@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="skycons.js"></script>
+		<style>
+			body{
+				background: black;
+				color:white;
+			}
+			#heading{
+				font-family: 'Lobster',cursive;
+				margin-bottom: 1em;
+			}
+			#change{
+				cursor: pointer;
+				text-decoration: underline;
+			}
+			#degrees{
+				padding-top:0.5em; 
+			}
+			#change{
+				padding-bottom:1em; 
+			}
+			#loading{
+				margin:0 auto;
+				width:70px;
+				height:70px;
+				background: url(http://res.cloudinary.com/dhyey/image/upload/loading-white_vqrms2.gif) no-repeat;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container-fluid text-center">
+			<h1 id="heading">Local  Weather</h1>
+			<h3 id="location"></h3>
+			<h4 id="degrees" >Loading ...</h4>
+			<h5 id="apparent"></h5>
+			<div id="loading"></div>
+			<div id="change"></div>
+			<h4 id="description"></h4>
+			<canvas id="icon" width="128" height="128"></canvas>
+			<h5 id="windSpeed"></h5>
+			
+
+
+		</div>
+		<script type="text/javascript" src="weatherApp.js"></script>
+	</body>
+</html>
