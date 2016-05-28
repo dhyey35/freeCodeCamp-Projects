@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<style>
+			body{
+				background: rgb(25,118,210);
+			}
+			#heading{
+				font-family: 'Lobster',cursive;
+				color:white;
+				font-size:4em;
+				margin-bottom: 0.5em;
+			}
+			#grouping div{
+				color:rgb(25,118,210);
+				background: white;
+				padding-top: 0.5em;
+				padding-bottom: 0.5em;
+				font-weight: bold;
+				font-size: 1.3em;
+				cursor: pointer;
+				margin-bottom: 0.25em;
+			}
+			#grouping{
+				margin-bottom: 1.5em;
+			}
+			.bg-red{
+				background:rgb(255,0,0) !important;
+				color:white !important;
+				border-top:3px solid rgb(200,0,0);
+				box-shadow: inset 0 0 10px rgb(200,0,0), 0 0 10px rgb(200,0,0);
+			}
+			[id^=data]{
+				color:white;
+				margin-bottom: 1em;
+				font-size:1.5em;
+				padding-top:0.5em;
+				padding-bottom: 0.5em;
+				cursor: pointer;
+				border-radius: 5px;
+			}
+			#result .online{
+				background: green;
+			}
+			#result .offline{
+				background-color: rgb(255,100,100);
+				/*background: #d35353;*/
+			}
+			#result .accClosed{
+				background: red;
+			}
+			#result .channelName{
+				float: left;
+				
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1 class="text-center" id="heading">Twitch.tv Streamers</h1>
+			<div class="row">
+				<div class="col-lg-3"></div>
+				<div class="col-lg-6 text-center">
+					<div class="row" id="grouping">
+						<div class="col-lg-4" id="showAll">All</div>
+						<div class="col-lg-4" id="showOnline">Online</div>
+						<div class="col-lg-4" id="showOffline">Offline</div>
+					</div>
+					<div id="result">
+
+					</div>
+				</div>
+				<div class="col-lg-3"></div>
+			</div>
+		</div>
+		<script>
+			$(document).ready(function(){
+
+				$("#grouping div").hover(function(){
+					$(this).addClass("bg-red");
+				});
+				$("#grouping div").mouseleave(function(){
+					$(this).removeClass("bg-red");
+				});
+
+				$("#showAll").click(function(){
+					$(".online").slideDown(1000);
+					$(".offline").slideDown(1000);
+				});
+				$("#showOffline").click(function(){
+					$(".offline").fadeIn(500);
+					$(".online").fadeOut(500);
+				});
+				$("#showOnline").click(function(){
+					$(".offline").fadeOut(500);
+					$(".online").fadeIn(500);
+				})
+
+				var channels = ["freecodecamp", "storbeck", "terakilobyte", "habathcx","RobotCaleb","thomasballinger","noobs2ninjas","beohoff","ogamingsc2","esl_sc2"];
+				var len = channels.length;
+				
+				$.each(channels,function(index){
+					
+					$.ajax({
+						async:false,
+						url:"https://api.twitch.tv/kraken/streams/"+channels[index],
+						dataType:"jsonp",
+						success: function(data){
+							if(data.stream === null){
+								$("#result").append('<div class="offline row" id="data'+index+'"></div>');
+								$("#data"+index).append('<div class="col-lg-4 channelName">'+channels[index]+'</div>');
+								$("#data"+index).append('<div class="col-lg-8 status"> Offline </div>');
+							}
+							else if(data.stream === undefined){
+								$("#result").append('<div class="accClosed row" id="data'+index+'"></div>');
+								$("#data"+index).append('<div class="col-lg-4 channelName">'+channels[index]+'</div>');
+								$("#data"+index).append('<div class="col-lg-8 status"> Account Closed </div>');
+							}
+							else{
+								var game = data.stream.game;
+								$("#result").append('<div class="online row" id="data'+index+'"></div>');
+								$("#data"+index).append('<div class="col-lg-4 channelName">'+channels[index]+'</div>')
+								$("#data"+index).append('<div class="col-lg-8 status">'+game+'</div>');
+							}
+							$("#data"+index).wrap('<a target="_blank" href="https://www.twitch.tv/'+channels
+										[index]+'"></a>');
+						}
+					})
+
+				});
+				
+			});
+		</script>
+	</body>
+</html>
