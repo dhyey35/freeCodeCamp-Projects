@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+		<style>
+		h2{
+			font-family: 'Lobster',cursive;
+			margin-bottom: 0px;
+			padding-bottom:0.5em;
+			padding-top: 0.5em; 
+		}
+
+		#quoteDiv{
+			background: purple;
+			color:white;
+			border-top-left-radius: 0px;
+			border-top-right-radius: 0px;
+		}
+		#next{
+			font-family: 'Lobster',cursive;
+			font-size: 1.5em;
+			margin-bottom: 1em;
+		}
+		.bg-1{
+			background: orange;
+			color: white;
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+		}
+		#buttons{
+			margin-top:3em;
+		}
+		</style>
+
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="text-center bg-1">
+				<h2>Quote Machine</h2>
+			</div>
+			<div class="jumbotron text-center" id="quoteDiv">
+				<div>
+					<p id="display"></p>
+				</div>
+				<div class="row" id="buttons">
+					<div class="col-md-4"></div>
+					<div class="col-md-4">
+						<div class="btn btn-success" id="next">
+							Next Quote
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div align="center">
+							<a id="tweet" href="" target="_blank" >
+							<img class="img-responsive twitter-logo" src="http://icons.iconarchive.com/icons/limav/flat-gradient-social/256/Twitter-icon.png"
+							alt="Tweet This" height="44" width="44">
+							</a>
+						</div>
+					</div>
+					
+					
+				</div>
+				
+			</div>
+						
+					
+		</div>
+					
+		<script>
+			//The quotes to be displayed
+			var quotes = ["For success get comfortable with being uncomfortable.",
+								 "Success in a person\'s life can be measured by how many uncomfortable conversations he is willing to have.",
+								 "Listen to all but do what your mind says.",
+								 "Always ask yourself while learning , \" how can I apply this practically  ?\"",
+								 "Always ask \" how can I do this differently ?\" ",
+								 "If you are afraid to go wrong and fail then you cannot produce something original.",
+								 "Learning to ignore things is the greatest path to inner peace.",
+								 "Do your thinking independently , be the chess player not the chess piece.",
+								 "Make mistakes of ambition and not mistakes of sloth. Develop the strength to do bold things, not the strength to suffer.",
+								 "Do you want me to give you formula for success ? its quite simple , really . Double your rate of failure.",
+								 "Fortune favors the Bold."
+								 ];
+
+
+	
+
+			$(document).ready(function(){
+
+				function getRandomQuote(){
+					//getting a random number
+					var num =  Math.floor(Math.random()*10);
+					var randomQuote = quotes[num];
+					//generating twitter link
+					var link = "http://twitter.com/home/?status="+randomQuote;
+					$("#tweet").attr("href",link);
+					return randomQuote;
+				}
+
+				//calling the function for the first time
+				$("#display").html(getRandomQuote());
+
+				$("#next").click(function(){
+					$("#display").html(getRandomQuote());
+				});
+
+			});
+		</script>
+	</body>
+</html>
