@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="spin.min.js"></script>
+		<style>
+			#heading{
+				background-color: red;
+				color:white;
+				padding-top:1em;
+				padding-bottom:0.5em;
+				font-family:Arial;
+				border-radius: 0px;
+			}
+			#heading h1{
+				font-family: 'Lobster',cursive;
+			}
+			#heading h4{
+				font-family: sans-serif;
+			}
+			#query{
+				margin-top: 2em;
+				width:20em;
+				height: 2em;
+				margin-bottom: 1em;
+			}
+			#query:focus{
+				outline: none;
+				border-bottom-color: red;
+			}
+			#searchIcon{
+				display: inline;
+				background: red;
+				padding-top: 0.4em;
+				padding-bottom: 0.4em;
+				padding-left: 1.5em;
+				padding-right: 1.5em;
+				color:white;
+				margin-bottom: 2em;
+				cursor: pointer;
+			}
+			#random a{
+				color: red !important;
+				font-size: 1.5em;
+				margin-bottom: 3em;
+				margin-top:1em;
+			}
+			#result{
+				margin-top:2em;
+			}
+			.title{
+				float:left;
+				display: none;
+				margin-right: 90%;
+				font-weight: bold;
+				border-left:5px solid red;
+				padding-left: 1em;
+				font-family: sans-serif;
+				cursor: pointer;
+			}
+			.snippet{
+				display: none;
+				float:left;
+				padding-bottom: 1em;
+				border-left:5px solid red;
+				padding-left: 1em;
+				margin-bottom: 2em;
+				font-family: sans-serif;
+				cursor: pointer;
+				margin-left:0; 
+				margin-right:10%;
+			}
+			a{
+				color: black;
+			}
+			#loading{
+				display: none;
+				margin-top:2em;
+			}
+			#no-data{
+				font-size: 2em;
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid text-center">
+			<div id="heading" class="jumbotron">
+				<h1>Wikipedia Viewer</h1>
+				<h4>Search Wikipedia with ease </h4>
+			</div>
+			<div id="search">
+					<input  type="text" placeholder="  Search" autocomplete="autocomplete" id="query">
+					<div id="searchIcon"><span class="glyphicon glyphicon-search"></span></div>
+					<p></p> 
+					<!-- para for margin-bottom -->
+					<div id="random"><a href="https://en.wikipedia.org/wiki/Special:Random" target="_blank">
+					 Get a Random Article</a></div> 
+					 <div id="loading"></div>
+					 <p id="no-data"></p>
+			</div>
+			<div id="result" class="text-left">
+				<!-- <div class="dataRec" id="result0">
+					<div class="title" id="result0title">Meaning</div>
+					<div class="snippet" id="result0snippet"> may refer to</div>
+				</div> -->
+			</div>
+		</div>
+
+		<script>
+			$(document).ready(function(){
+				// building the loading gif with pure js
+				var opts = {
+				  lines: 13 // The number of lines to draw
+				, length: 14 // The length of each line
+				, width: 7 // The line thickness
+				, radius: 19 // The radius of the inner circle
+				, scale: 1 // Scales overall size of the spinner
+				, corners: 1 // Corner roundness (0..1)
+				, color: '#000' // #rgb or #rrggbb or array of colors
+				, opacity: 0.25 // Opacity of the lines
+				, rotate: 0 // The rotation offset
+				, direction: 1 // 1: clockwise, -1: counterclockwise
+				, speed: 1 // Rounds per second
+				, trail: 60 // Afterglow percentage
+				, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+				, zIndex: 2e9 // The z-index (defaults to 2000000000)
+				, className: 'spinner' // The CSS class to assign to the spinner
+				, top: '80%' // Top position relative to parent
+				, left: '50%' // Left position relative to parent
+				, shadow: false // Whether to render a shadow
+				, hwaccel: false // Whether to use hardware acceleration
+				, position: 'absolute' // Element positioning
+				}
+				var target = document.getElementById('loading')
+				var spinner = new Spinner(opts).spin(target);
+
+				//simulating click on icon when user presses enter
+				$("#query").keypress(function(key){
+					if(key.keyCode == "13"){
+						$("#searchIcon").trigger("click");
+					}
+				});
+				
+				//sending ajax when user clicks
+				$("#searchIcon").click(function(){
+
+					var searchText = encodeURI($("#query").val());
+					if(searchText.length < 1){
+						//basic checking
+						$("#no-data").html("Please enter Text !!");
+						$("#query").focus();
+						return;
+					}
+					$("#result").empty();//so that new results can be loaded without refreshing
+					$("#no-data").empty();
+					$("#loading").show();
+					
+					$.ajax({
+						url: 'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch='+searchText,
+						dataType:'jsonp',
+						success: function(data){	
+							if(!data.query){
+								$("#loading").hide();
+								$("#no-data").html("Sorry No Data Found !! Try something else");
+
+							}
+							var i=0;
+							$.each(data.query.pages, function(pageid,object){
+									$("#result").append('<div class="dataRec" id="result'+i+'"></div>');
+									$("#result"+i).append('<div title="Click to open in wikipedia" class="title" id="result'+i+'title" >'+object.title + '</div>');
+									$("#result"+i).append('<div title="Click to open in wikipedia" class="snippet" id="result'+i+'snippet" >'+object.extract + '</div>');
+									$(".title").each(function(){
+										$(this).wrapInner('<a href="https://en.wikipedia.org/?curid='+pageid+
+												'" target="_blank" ></a>' );
+									});
+									$(".snippet").each(function(){
+										$(this).wrap('<a href="https://en.wikipedia.org/?curid='+pageid
+											+'" target="_blank" ></a>' );
+									});
+									i++;
+
+							});
+							$("#loading").hide();
+							$(".title").slideDown();
+							$(".snippet").slideDown();
+						}
+					})
+
+
+
+					
+				});
+				
+			});
+		</script>
+	</body>
+</html>

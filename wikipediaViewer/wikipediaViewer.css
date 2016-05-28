@@ -1,0 +1,77 @@
+#heading{
+	background-color: red;
+	color:white;
+	padding-top:1em;
+	padding-bottom:0.5em;
+	font-family:Arial;
+	border-radius: 0px;
+}
+#heading h1{
+	font-family: 'Lobster',cursive;
+}
+#heading h4{
+	font-family: sans-serif;
+}
+#query{
+	margin-top: 2em;
+	width:20em;
+	height: 2em;
+	margin-bottom: 1em;
+}
+#query:focus{
+	outline: none;
+	border-bottom-color: red;
+}
+#searchIcon{
+	display: inline;
+	background: red;
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+	color:white;
+	margin-bottom: 2em;
+	cursor: pointer;
+}
+#random a{
+	color: red !important;
+	font-size: 1.5em;
+	margin-bottom: 3em;
+	margin-top:1em;
+}
+#result{
+	margin-top:2em;
+}
+.title{
+	float:left;
+	display: none;
+	margin-right: 90%;
+	font-weight: bold;
+	border-left:5px solid red;
+	padding-left: 1em;
+	font-family: sans-serif;
+	cursor: pointer;
+}
+.snippet{
+	display: none;
+	float:left;
+	padding-bottom: 1em;
+	border-left:5px solid red;
+	padding-left: 1em;
+	margin-bottom: 2em;
+	font-family: sans-serif;
+	cursor: pointer;
+	margin-left:0; 
+	margin-right:10%;
+}
+a{
+	color: black;
+}
+#loading{
+	display: none;
+	margin-top:2em;
+}
+#no-data{
+	font-size: 2em;
+	font-weight: bold;
+}
