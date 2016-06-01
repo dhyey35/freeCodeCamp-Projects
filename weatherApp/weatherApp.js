@@ -3,6 +3,7 @@ $(document).ready(function(){
 	$.getJSON("http://ip-api.com/json",function(jsonRec){
 		if(jsonRec.status == "success"){
 			getWeather(jsonRec.lat,jsonRec.lon,jsonRec.city,jsonRec.country);
+			initMap(jsonRec.lat, jsonRec.lon);
 		}
 		else{
 			$("#degrees").html("Sorry no data available for your location.");
@@ -68,7 +69,22 @@ $(document).ready(function(){
 
 		});
 
-	}	
+	}
+
+	function initMap(latitude, longitude) {
+	  var myLatLng = {lat: latitude , lng: longitude};
+
+	  var map = new google.maps.Map(document.getElementById('map'), {
+	    zoom: 10,
+	    center: myLatLng
+	  });
+
+	  var marker = new google.maps.Marker({
+	    position: myLatLng,
+	    map: map,
+	    title: 'Hello World!'
+	  });
+	}
 
 });
 
